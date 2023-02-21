@@ -30,7 +30,10 @@ export async function getServerSideProps(context) {
     response = await fetch(
       `https://api.themoviedb.org/3${request[genre]?.url}`
     ).then((res) => res.json());
-  } else if (searchQuery) {
+  }
+
+  // Search functionality
+  else if (searchQuery) {
     response = await fetch(
       `https://api.themoviedb.org/3/search/movie?api_key=${process.env.NEXT_PUBLIC_API_KEY}&language=en-US&query=${searchQuery}`
     ).then((res) => res.json());
