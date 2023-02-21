@@ -1,10 +1,13 @@
+"use client";
 import Head from "next/head";
 import Header from "@/components/Header";
 import NavBar from "@/components/NavBar";
 import request from "@/utils/request";
 import Results from "@/components/Results";
+import { useState } from "react";
 
 export default function Home({ results }) {
+  const [searching, setSearching] = useState(false);
   return (
     <>
       <Head>
@@ -21,13 +24,23 @@ export default function Home({ results }) {
 
 export async function getServerSideProps(context) {
   const genre = context.query.genre;
+  const searchQuery = context.query.movie_name;
 
-  const response = await fetch(
-    `https://api.themoviedb.org/3${
-      request[genre]?.url || request.fetchTrending.url
-    }`
-  ).then((res) => res.json());
+  let response;
 
+  if (genre) {
+    response = await fetch(
+      `https://api.themoviedb.org/3${request[genre]?.url}`
+    ).then((res) => res.json());
+  } else if (searchQuery) {
+    response = await fetch(
+      `https://api.themoviedb.org/3/search/movie?api_key=${process.env.NEXT_PUBLIC_API_KEY}&language=en-US&query=${searchQuery}`
+    ).then((res) => res.json());
+  } else {
+    response = await fetch(
+      `https://api.themoviedb.org/3${request.fetchTrending.url}`
+    ).then((res) => res.json());
+  }
   return {
     props: {
       results: response.results,
