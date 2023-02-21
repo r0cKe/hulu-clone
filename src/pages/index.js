@@ -4,10 +4,8 @@ import Header from "@/components/Header";
 import NavBar from "@/components/NavBar";
 import request from "@/utils/request";
 import Results from "@/components/Results";
-import { useState } from "react";
 
 export default function Home({ results }) {
-  const [searching, setSearching] = useState(false);
   return (
     <>
       <Head>
